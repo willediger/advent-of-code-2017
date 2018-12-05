@@ -1,5 +1,4 @@
 input = 368078
-input = 11
 
 grid = []
 max_width = 0
@@ -30,7 +29,6 @@ for i in range(1, input+1):
             direction = 'down'
             max_width = len(grid[y])
             y += 1
-            print('asdf')
     elif direction == 'down':
         if y == len(grid):
             grid.append([i])
@@ -55,8 +53,13 @@ if direction == 'up':
     for i in range(len(grid)-1, 0, -1):
         if len(grid[i]) > len(grid[i-1]):
             grid[i-1].append(0)
-    
 
-breakpoint()
-distance = 0
-print('a', distance)
+def grid_location(num):
+    return [(i, n.index(num)) for i, n in enumerate(grid) if num in n][0]
+
+def distance(loc1, loc2):
+    return abs(loc2[0] - loc1[0]) + abs(loc2[1] - loc1[1])
+
+dist = distance(grid_location(1), grid_location(input))
+
+print('a', dist)
