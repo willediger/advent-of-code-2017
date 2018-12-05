@@ -1,8 +1,11 @@
 file_input = open('Day01/input', 'r')
 file_array = file_input.read().splitlines()
 
+
 file_str = file_array[0]
+
 file_str_len = len(file_str)
+file_str_half_len = file_str_len/2
 
 captcha_sum = 0
 for i, c in enumerate(file_str):
@@ -15,4 +18,14 @@ for i, c in enumerate(file_str):
     if c_int == c_next:
         captcha_sum += c_int
 
-print(captcha_sum)
+print('a', captcha_sum)
+
+captcha_sum = 0
+for i, c in enumerate(file_str):
+    c_int = int(c)
+    c_next_i = int((i + file_str_half_len) % file_str_len)
+    c_next = int(file_str[c_next_i])
+    if c_int == c_next:
+        captcha_sum += c_int
+
+print('b', captcha_sum)
