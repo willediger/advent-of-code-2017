@@ -32,5 +32,3 @@ word_counts = word_count(sorted_array_words)
 unique_passphrases = unique_phrases(word_counts)
 
 print('b', unique_passphrases)
-
-breakpoint()
