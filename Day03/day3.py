@@ -28,7 +28,6 @@ def locs(inp, typ):
         if num > input:
             break
         locations.append([x,y,num])
-        print(num)
         if direction == 'right':
             x += 1
             if x > max_x:
