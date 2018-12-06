@@ -1,65 +1,64 @@
 input = 368078
 
-grid = []
-max_width = 0
-max_height = 0
-for i in range(1, input+1):
-    if i == 1:
-        direction = 'right'
-        y = 0
-        grid.insert(y,[i])
-        max_width = len(grid[y])
-    elif direction == 'right':
-        grid[y].append(i)
-        if len(grid[y]) > max_width:
-            direction = 'up'
-            max_width = len(grid[y])
-            y -= 1
-    elif direction == 'up':
-        if y < 0:
-            grid.insert(0, [i])
-            direction = 'left'
-            y = 0
-        else: 
-            grid[y].append(i)
-            y -= 1
-    elif direction == 'left':
-        grid[y].insert(0, i)
-        if len(grid[y]) > max_width:
-            direction = 'down'
-            max_width = len(grid[y])
-            y += 1
-    elif direction == 'down':
-        if y == len(grid):
-            grid.append([i])
-            direction = 'right'
-        else:
-            grid[y].insert(0, i)
-            y += 1
+test = False
 
-#normalize grid
-if direction == 'left' and len(grid[0]) < len(grid[1]):
-    grid[0][0:0] = [0] * (len(grid[1]) - len(grid[0]))
-
-if direction == 'down':
-    for i in range(1, len(grid)):
-        if len(grid[i]) < len(grid[i-1]):
-            grid[i].insert(0, 0)
-
-if direction == 'right' and len(grid[len(grid)-1]) < len(grid[len(grid)-2]):
-    grid[len(grid)-1].extend([0]*(len(grid[len(grid)-2]) - len(grid[len(grid)-1])))
-
-if direction == 'up':
-    for i in range(len(grid)-1, 0, -1):
-        if len(grid[i]) > len(grid[i-1]):
-            grid[i-1].append(0)
-
-def grid_location(num):
-    return [(i, n.index(num)) for i, n in enumerate(grid) if num in n][0]
+if test:
+    input = 1024
 
 def distance(loc1, loc2):
     return abs(loc2[0] - loc1[0]) + abs(loc2[1] - loc1[1])
 
-dist = distance(grid_location(1), grid_location(input))
+def grid_location(locs, num):
+    return [[e[0], e[1]] for e in locs if num == e[2]][0]
 
-print('a', dist)
+def locs(inp, typ):
+    x = 0
+    y = 0
+    direction = 'right'
+    locations = []
+    min_x = 0
+    min_y = 0
+    max_x = 0
+    max_y = 0
+    for i in range(1, input+1):
+        if i == 1 or typ == 'a':
+            num = i
+        else:
+            num = sum([l[2] for l in locations if abs(l[0]-x) < 2 and abs(l[1] - y) < 2])
+        if num > input:
+            break
+        locations.append([x,y,num])
+        print(num)
+        if direction == 'right':
+            x += 1
+            if x > max_x:
+                max_x += 1
+                direction = 'up'
+        elif direction =='up':
+            y -= 1
+            if y < min_y:
+                min_y -= 1
+                direction = 'left'
+        elif direction =='left':
+            x -= 1
+            if x < min_x:
+                min_x -= 1
+                direction = 'down'
+        elif direction =='down':
+            y += 1
+            if y > max_y:
+                max_y += 1
+                direction = 'right'
+    if typ == 'b':
+        return num
+    if typ == 'a':
+        return locations
+
+a_locs = locs(input, 'a')
+
+input_loc = grid_location(a_locs, input)
+one_loc = grid_location(a_locs, 1)
+input_dist = distance(input_loc, one_loc)
+
+print('a', input_dist)
+print('b', locs(input, 'b'))
